@@ -1,0 +1,14 @@
+target/
+.classpath
+.project
+.settings
+.DS_Store
+debug.sh
+.idea
+*.iml
+scripts/*.pyc
+__pycache__/
+venv/
+.factorypath
+.vscode/settings.json
+native-libs
