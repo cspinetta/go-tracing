@@ -33,7 +33,7 @@ docker-compose up --build --force-recreate --no-deps -d
 
 ```
 curl --request GET \
-  --url http://localhost:8080/ping
+  --url http://localhost:8080/health-check
 ```
 
 ```
@@ -59,3 +59,17 @@ curl --request GET \
 ## Inspect traces on Jaeger UI
 
 Open http://localhost:16686/
+
+## Screenshots
+
+* **List of traces:**
+
+![List of traces](docs/traces_list.png)
+
+* **A trace:**
+
+![Trace view](docs/trace_view.png)
+
+* **Details of a span:**
+
+![Span tags](docs/span_tags.png)

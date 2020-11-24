@@ -14,8 +14,9 @@ import (
 )
 
 type App struct {
-	Router      *gin.Engine
-	UserService services.IUserService
+	Router             *gin.Engine
+	UserService        services.IUserService
+	HealthCheckService services.IHealthCheckService
 }
 
 func NewApp(db *sqlx.DB) *App {
@@ -25,10 +26,12 @@ func NewApp(db *sqlx.DB) *App {
 
 	userRepository := repository.NewUserRepository(db)
 	userService := services.NewUserService(userRepository)
+	healthCheckService := services.NewHealthCheck(db)
 
 	app := App{
-		Router:      gin.New(),
-		UserService: userService,
+		Router:             gin.New(),
+		UserService:        userService,
+		HealthCheckService: healthCheckService,
 	}
 
 	app.RegisterMiddlewares()
@@ -47,9 +50,10 @@ func (app *App) Start(port string) {
 }
 
 func (app *App) RegisterControllers() {
+	healthCheckController := controllers.NewHealthCheckHandler(app.HealthCheckService)
 	userController := controllers.NewUserController(app.UserService)
 
-	app.Router.GET("/ping", controllers.NewHealthCheckHandler().HandlePing)
+	app.Router.GET("/health-check", healthCheckController.HandleHealthCheck)
 
 	dataFields := app.Router.RouterGroup.Group("/user")
 	{
